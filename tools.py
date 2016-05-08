@@ -3,6 +3,7 @@ import json
 import urllib2
 
 allAttr = 'Id,AA.AuId,AA.AfId,F.FId,C.CId,J.JId'
+branch = 'Id,AA.AuId,AA.AfId'
 
 def getJson(evaluate):
         order = 'https://oxfordhk.azure-api.net/academic/v1.0/evaluate?' \
@@ -16,6 +17,9 @@ def getJson(evaluate):
         return ob
         
 def toExpr(id, attributes):
+        return 'expr=Id=' + id + '&count=10000&attributes=' + attributes
+
+def toCompositeExpr(id, attributes):
         return 'expr=Id=' + id + '&count=10000&attributes=' + attributes
         
 def idOrAuId(id):
@@ -44,7 +48,13 @@ def dealAuIdToId(id1, id2):
 	pass
 
 def dealAuIdToAuId(id1, id2):
-	pass
+	global branch
+	json1 = getJson(toCompositeExpr(str(id1), branch))
+        json2 = getJson(toCompositeExpr(str(id2), branch))
+        entity1 = json1['entities'][0]
+        entity2 = json1['entities'][0]
+        for i in entity1:
+                pass
 
 def dealIdToId(id1, id2):
         global allAttr
